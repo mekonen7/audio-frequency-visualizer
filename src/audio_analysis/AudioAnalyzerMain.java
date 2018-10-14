@@ -20,11 +20,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import java.awt.event.*;
-import javax.swing.JButton;
 
-import java.awt.Color;
+import static java.lang.Math.random;
+
+
 
 public class AudioAnalyzerMain {
+    
     public static int getMaxF(double a[]) {
 	int max = 0;
 	for (int i = 1; i < a.length; i++) {
@@ -77,7 +79,7 @@ public class AudioAnalyzerMain {
 
 	    float hue = 0;
 	    if (primaryF != 0)
-		hue = ((float) 20 / (float) primaryF); // lower frequencies have more effect on color change
+		hue = ((float) 10 / (float) primaryF); // lower frequencies have more effect on color change
 
 	    p.setBackground(Color.getHSBColor(hue, 1, 1));
 	    

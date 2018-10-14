@@ -28,8 +28,8 @@ public class AnalyzerUI extends Application {
 	MAX_Y = 20000;
 	
 	
-	NumberAxis xAxis = new NumberAxis();
-	xAxis.setLabel("Freq.");
+	NumberAxis xAxis = new NumberAxis(MIN_X, MAX_X, MAX_X/10);
+	xAxis.setLabel("Frequency");
         xAxis.setTickLabelsVisible(true);
         xAxis.setTickMarkVisible(false);
         xAxis.setMinorTickVisible(false);
@@ -45,11 +45,10 @@ public class AnalyzerUI extends Application {
 	lineChart.setTitle("Frequency Spectrograph");
 	//lineChart.setHorizontalGridLinesVisible(true);
 
-	// Set Name for Series
-	series1.setName("Amplitude line");
-
 	// Add Chart Series
 	lineChart.getData().add(series1);
+	
+	lineChart.setLegendVisible(false);
 	
 	primaryStage.setScene(new Scene(lineChart,1000,500));
     }

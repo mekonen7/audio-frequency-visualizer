@@ -9,7 +9,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
 
-
 public class AudioCapture {
     
     private static float sampleRate = 44100;	//samples per second 

@@ -14,24 +14,38 @@ import java.util.function.Function;
 
 // Java 8 code
 public class AnalyzerUI2 extends Application {
+    
+    byte[] data;
+    public static int getMaxF(double a[]) {
+	int max = 0;
+	for (int i = 1; i < a.length; i++) {
+	    if (a[max] < a[i])
+		max = i;
+	}
+	return max;
+    }
 
+    
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(final Stage stage) {
-        Axes axes = new Axes(
-                1500, 800,
-                -8, 8, 1,
-                -6, 6, 1
-        );
+        Axes axes = new Axes(1500, 800,-8, 8, 1,-6, 6, 1);
         
-        Function<Double, Double> function = x -> .25 * (x + 4) * (x + 1) * (x - 2);
+        AudioCapture.setFormat(44100, 8);
+	AudioCapture.setUp();
+	data = AudioCapture.capture();
+
+	double[] arr = FFT.fftReal(data);
+	
+	int topFreq = getMaxF(arr);
+	
+	System.out.println(topFreq);
+        Function<Double, Double> function = x -> Math.cos(x*topFreq/(2*Math.PI));
         
         Plot plot = new Plot(function,-8, 8, 0.1,axes);
-
-        
         
         StackPane layout = new StackPane(plot);
         
@@ -41,6 +55,9 @@ public class AnalyzerUI2 extends Application {
         stage.setTitle("TITLE");
         stage.setScene(new Scene(layout, Color.rgb(35, 39, 50)));
         stage.show();
+        
+        
+        
     }
 
     class Axes extends Pane {
@@ -90,25 +107,18 @@ public class AnalyzerUI2 extends Application {
             path.setStroke(Color.ORANGE.deriveColor(0, 1, 1, 0.6));
             path.setStrokeWidth(2);
 
-            path.setClip(
-                    new Rectangle(
-                            0, 0, 
-                            axes.getPrefWidth(), 
-                            axes.getPrefHeight()
-                    )
-            );
+            path.setClip(new Rectangle(0, 0, axes.getPrefWidth(), axes.getPrefHeight()));
+            
 
             double x = xMin;
             double y = f.apply(x);
 
-            path.getElements().add(
-                    new MoveTo(
-                            mapX(x, axes), mapY(y, axes)
-                    )
-            );
+            path.getElements().add(new MoveTo(mapX(x, axes), mapY(y, axes)));
 
             x += xInc;
+            
             while (x < xMax) {
+        	
                 y = f.apply(x);
 
                 path.getElements().add(
